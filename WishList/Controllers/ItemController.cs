@@ -19,13 +19,15 @@ namespace WishList.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var model = _context.Items.ToList();
+
+            return View("Index", model);
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            return View("Create");
         }
 
         [HttpPost]
@@ -34,17 +36,16 @@ namespace WishList.Controllers
             _context.Items.Add(item);
             _context.SaveChanges();
 
-            return Redirect("/Index");
+            return RedirectToAction("Index");
         }
 
-        [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var itemToDelete = _context.Items.Single(i => i.Id == id);
+            var itemToDelete = _context.Items.FirstOrDefault(i => i.Id == id);
             _context.Items.Remove(itemToDelete);
             _context.SaveChanges();
 
-            return Redirect("/Index");
+            return RedirectToAction("Index");
         }
     }
 }
